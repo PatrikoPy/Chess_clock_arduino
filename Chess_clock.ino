@@ -14,9 +14,9 @@ bool start = false;
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(26, 27, 50, 51, 52, 53);
 
-void DisplayTimer(int timeLeft, int line = 0)
+void DisplayTimer(int timeLeft, int col = 0)
 {
-  lcd.setCursor(10, line);
+  lcd.setCursor(col, 1);
   lcd.print(timeLeft / 60);
   lcd.print(":");
   if (timeLeft % 60 > 9)
@@ -36,18 +36,14 @@ void DisplayPlayer(short player)
     case 1:
       {
         lcd.setCursor(0, 0);
-        lcd.print(">>WHITE>>");
-        lcd.setCursor(0, 1);
-        lcd.print("  BLACK  ");
-        DisplayTimer(whiteTimer, 0);
+        lcd.print(" BLACK   >WHITE<");
+        DisplayTimer(whiteTimer, 10);
         break;
       }
     case 2:
       {
         lcd.setCursor(0, 0);
-        lcd.print("  WHITE  ");
-        lcd.setCursor(0, 1);
-        lcd.print(">>BLACK>>");
+        lcd.print(">BLACK<   WHITE ");
         DisplayTimer(blackTimer, 1);
         break;
       }
@@ -72,16 +68,14 @@ void SetTimer()
       blackTimer = 300;
       break;
   }
-  DisplayTimer(whiteTimer, 0);
+  DisplayTimer(whiteTimer, 10);
   DisplayTimer(blackTimer, 1);
 }
 
 void setup() {
   lcd.begin(16, 2);
   lcd.setCursor(0, 0);
-  lcd.print("  WHITE  ");
-  lcd.setCursor(0, 1);
-  lcd.print("  BLACK  ");
+  lcd.print(" BLACK    WHITE ");
   pinMode(btnWHITE, INPUT);
   pinMode(btnBLACK, INPUT);
 
@@ -104,17 +98,13 @@ void loop() {
       start = false;
       if (whiteTimer == 0)
       {
-        lcd.setCursor(0, 1);
-        lcd.print(">WINNER< ");
         lcd.setCursor(0, 0);
-        lcd.print(">LOOSER< ");
+        lcd.print(">WINNER<>LOOSER<");
       }
       else if (blackTimer == 0)
       {
         lcd.setCursor(0, 0);
-        lcd.print(">WINNER< ");
-        lcd.setCursor(0, 1);
-        lcd.print(">LOOSER<");
+        lcd.print(">LOOSER<>WINNER<");
       }
     }
     if (digitalRead(btnWHITE) == HIGH)
@@ -128,7 +118,7 @@ void loop() {
     if (digitalRead(btnWHITE) == HIGH || digitalRead(btnBLACK) == HIGH)
       start = true;
     playerMode = 1;
-    delay(500);
+    delay(200);
   }
 
 }
